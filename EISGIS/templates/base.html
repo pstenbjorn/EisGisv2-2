@@ -1,0 +1,43 @@
+<html>
+<head>
+	<title>{{ title }}</title>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='uikit.min.css') }}" />
+    <script src="{{ url_for('static', filename='uikit.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='uikit-icons.min.js') }}"></script>
+
+<head>
+<body>
+	<div class="uk-section uk-section-default uk-section-small">
+    <div class="uk-navbar-container" uk-navbar>
+    	<div class="uk-navbar-center">
+	        <ul class="uk-navbar-nav">
+	            <li class="uk-active"><a href="/">Home</a></li>
+	            <li class="uk-active"><a href="{{ url_for('upload') }}">Upload Data Files</a></li>
+	            <li class="uk-active"><a href="#">Process Data Files</a></li>
+	            <li class="uk-active"><a href="{{ url_for('login') }}">Log out</a></li>
+	        </ul>
+    	</div>
+    </div>
+	
+	<img src="{{ url_for('static', filename='logo.png') }}" alt="Election Information Services" align=left>
+	<h1>Welcome to EIS-GIS</h1>		
+	</div>
+	<div class="uk-container uk-container-small">		
+		<h3>{{ pagename }} </h3>
+	</div>
+	{% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+	{% block content %}{% endblock %}
+	
+	
+
+</body>

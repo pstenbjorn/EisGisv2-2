@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="uk-container uk-container-small">    
+    <p>Upload address data, district data, precinct and district relational data in txt or csv formats as described here</p>    
+    <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+    	<input type='hidden' name='username' value='{{ userid }}'>
+    	<table class="uk-table uk-table-striped">
+    	<thead><tr><th colspan=2>Select File To Upload</th></tr></thead>
+    	<tbody>
+    	<tr><td>File Type:</td><td> 
+    	<select name="filetype">
+		  <option value="address">Street Address Data</option>
+		  <option value="district">District Data</option>
+		  <option value="precinctdistrict">Precinct District Data</option>		  
+		</select></td></tr>
+		<tr><td>
+    	Select File:</td><td><input type="file" name="file" autocomplete="off" required></td></tr>
+    	<tr><td></td><td><input type='submit' value='Save File'></td></tr>
+    	</tbody></table>
+    </form>
+
+</div>
+{% endblock %}

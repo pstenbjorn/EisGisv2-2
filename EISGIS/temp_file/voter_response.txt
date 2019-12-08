@@ -1,0 +1,169 @@
+{	"meta": {
+	},
+	"data": [
+	{
+    "VoterRecordsResponse": {
+        "TransactionId": "avr_test20190217103743913180",
+        "VoterRecord": [
+            {
+                "District": [
+                    {
+                        "ExternalIdentifier": [],
+                        "IsDistricted": null,
+                        "Location": null,
+                        "Name": "3",
+                        "OtherType": null,
+                        "Type": "congressional",
+                        "original_tagname_": null
+                    },
+                    {
+                        "ExternalIdentifier": [],
+                        "IsDistricted": null,
+                        "Location": null,
+                        "Name": "3",
+                        "OtherType": null,
+                        "Type": "state-senate",
+                        "original_tagname_": null
+                    },
+                    {
+                        "ExternalIdentifier": [],
+                        "IsDistricted": null,
+                        "Location": null,
+                        "Name": "3",
+                        "OtherType": null,
+                        "Type": "state-house",
+                        "original_tagname_": null
+                    }
+                ],
+                "ElectionAdministration": null,
+                "HavaIdRequired": null,
+                "Locality": [
+                    {
+                        "ExternalIdentifier": [],
+                        "IsDistricted": null,
+                        "Location": null,
+                        "Name": "PIMA COUNTY",
+                        "OtherType": null,
+                        "Type": "county",
+                        "original_tagname_": null
+                    },
+                    {
+                        "ExternalIdentifier": [],
+                        "IsDistricted": null,
+                        "Location": null,
+                        "Name": "111",
+                        "OtherType": null,
+                        "Type": "precinct",
+                        "original_tagname_": null
+                    }
+                ],
+                "OtherStatus": null,
+                "PollingLocation": null,
+                "Voter": {
+                    "ContactMethod": [],
+                    "DateOfBirth": null,
+                    "Ethnicity": null,
+                    "Gender": "M",
+                    "MailingAddress": null,
+                    "Name": {
+                        "FirstName": "John",
+                        "FullName": null,
+                        "LastName": "Smith",
+                        "MiddleName": "S",
+                        "Prefix": null,
+                        "Suffix": null,
+                        "original_tagname_": null,
+                        "valueOf_": null
+                    },
+                    "Party": null,
+                    "PreviousName": null,
+                    "PreviousResidenceAddress": null,
+                    "PreviousSignature": null,
+                    "ResidenceAddress": {
+                        "AddressAnomalyStatus": null,
+                        "AddressAuthority": null,
+                        "AddressClassification": null,
+                        "AddressCoordinateReferenceSystem": null,
+                        "AddressElevation": null,
+                        "AddressEndDate": null,
+                        "AddressFeatureType": null,
+                        "AddressId": null,
+                        "AddressLatitude": null,
+                        "AddressLifecycleStatus": null,
+                        "AddressLongitude": null,
+                        "AddressParcelIdentifier": null,
+                        "AddressParcelIdentifierSource": null,
+                        "AddressRangeDirectionality": null,
+                        "AddressRangeParity": null,
+                        "AddressRangeSpan": null,
+                        "AddressRangeType": null,
+                        "AddressReferenceSystemAuthority": null,
+                        "AddressReferenceSystemId": null,
+                        "AddressSideOfStreet": null,
+                        "AddressStartDate": null,
+                        "AddressTransportationFeatureID": null,
+                        "AddressTransportationFeatureType": null,
+                        "AddressTransportationSystemAuthority": null,
+                        "AddressTransportationSystemName": null,
+                        "AddressXCoordinate": null,
+                        "AddressYCoordinate": null,
+                        "AddressZLevel": null,
+                        "CompleteAddressNumber": "1234",
+                        "CompleteLandmarkName": null,
+                        "CompletePlaceName": null,
+                        "CompleteStreetName": "E Main St ",
+                        "CompleteSubaddress": "Tucson, AZ 85701",
+                        "CountryName": null,
+                        "DataSetID": null,
+                        "LocationDescription": null,
+                        "MailableAddress": null,
+                        "OfficialStatus": null,
+                        "PlaceStateZip": [],
+                        "RelatedAddressId": null,
+                        "RelatedTransportationFeatureID": null,
+                        "StateName": null,
+                        "USNationalGridCoordinate": null,
+                        "ZipCode": null,
+                        "ZipPlus4": null,
+                        "action": null,
+                        "original_tagname_": null
+                    },
+                    "ResidenceAddressIsMailingAddress": null,
+                    "Signature": null,
+                    "VoterClassification": {
+                        "Assertion": "no",
+                        "OtherAssertion": null,
+                        "OtherType": "Active",
+                        "Type": "other",
+                        "original_tagname_": null
+                    },
+                    "VoterId": [
+                        {
+                            "AttestNoSuchId": null,
+                            "DateOfIssuance": null,
+                            "FileValue": null,
+                            "OtherType": null,
+                            "StringValue": "V9990999",
+                            "Type": "drivers-license",
+                            "original_tagname_": null
+                        },
+                        {
+                            "AttestNoSuchId": null,
+                            "DateOfIssuance": null,
+                            "FileValue": null,
+                            "OtherType": null,
+                            "StringValue": "9999909",
+                            "Type": "state-voter-registration-id",
+                            "original_tagname_": null
+                        }
+                    ],
+                    "original_tagname_": null
+                },
+                "VoterParticipation": [],
+                "VoterStatus": null,
+                "original_tagname_": null
+            
+		}]
+}]
+
+}
