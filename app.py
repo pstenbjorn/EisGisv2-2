@@ -6,7 +6,7 @@ import os
 import json
 import models
 from configs import Config
-from forms import LoginForm
+from forms import LoginForm, GeoCodeAddress
 from datastore import dbaccess
 from flask_login.utils import login_required
 
@@ -59,7 +59,15 @@ def login():
             flash('Login failed, please try again')
     
     return render_template('login.html', title='Sign In', pagename='Login to EIS GIS', form=form)
-    
+  
+@app.route('/geocode')
+def geocode():
+    form = GeoCodeAddress()
+    if form.validate_on_submit():
+        pass #TODO plug in geocode api
+    else:
+        return render_template('geocode.html', title='Test Geocoding', pagename='Test Geocoder', form=form)
+      
 
 @app.route('/api/<ver>/<path>')
 @app.route('/api/<ver>/<path>/<id>')

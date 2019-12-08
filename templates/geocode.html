@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="uk-container uk-container-small">
+    <h3>Address Test</h3>
+    <form action="{{ url_for('geocode') }}" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <table>
+        <tr><td>
+            {{ form.fulladdress.label }}:</td><td>
+            {{ form.fulladdress(size=32) }}
+        </td></tr>
+        <tr><td>
+            {{ form.city.label }}:</td><td>
+            {{ form.city(size=32) }}</td></tr> 
+            <tr><td>{{ form.state.label }}:</td><td>
+            {{ form.state(size=32) }} </td></tr>
+            <tr><td>{{ form.zipCode.label }}:</td><td>
+            {{ form.zipCode(size=32) }}</td></tr>
+        
+        <tr><td></td><td>{{ form.submit() }}</p></td></tr>
+        </table>
+    </form>
+    </div>
+{% endblock %}
