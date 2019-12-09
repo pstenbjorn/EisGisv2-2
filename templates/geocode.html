@@ -8,6 +8,18 @@
     	<br>{{ ad['city'] }}, {{ ad['state'] }} {{ ad['zip'] }}
     	<p>
     	<b>Latitude: {{ lat }} Longitude: {{ long }}</b>
+    	<div id='mapid' style="height: 250">
+    	</div>
+    	<script>
+    		var mymap = L.map('mapid').setView([{{ lat }}, {{ long }}], 15);
+    		L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+    			attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Image &copy; <a href="https://www.mapbox.com/">Mapbox</a>',
+    			maxZoom: 18,
+    			id: 'mapbox/streets-v11',
+    			accessToken: 'pk.eyJ1IjoicHN0ZW5iam9ybiIsImEiOiJjazN4cXA2YXoxMTRnM3BsYjZqb3NodzZ1In0.XqG0P9JZzRuaDQPACKtd8g'
+			}).addTo(mymap);
+			var marker = L.marker([{{ lat }}, {{ long }}]).addTo(mymap);
+    	</script>
     {% endif %}
     	</p>
     <form action="{{ url_for('geocode') }}" method="post" novalidate>
