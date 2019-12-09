@@ -3,6 +3,13 @@
 {% block content %}
 	<div class="uk-container uk-container-small">
     <h3>Address Test</h3>
+    {% if ad %}
+    	Address mapped: {{ ad['address'] }}
+    	<br>{{ ad['city'] }}, {{ ad['state'] }} {{ ad['zip'] }}
+    	<p>
+    	<b>Latitude: {{ lat }} Longitude: {{ long }}</b>
+    {% endif %}
+    	</p>
     <form action="{{ url_for('geocode') }}" method="post" novalidate>
         {{ form.hidden_tag() }}
         <table>

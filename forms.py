@@ -10,9 +10,9 @@ class LoginForm(FlaskForm):
     
     
 class GeoCodeAddress(FlaskForm):
-    fulladdress = StringField("Full Address", validators=[DataRequired])
-    city = StringField("City", validators=[DataRequired])
-    state = StringField("State", validators=[DataRequired])
-    zipCode = StringField("Zip Code")
+    fulladdress = StringField("Full Address", validators=[DataRequired()])
+    city = StringField("City", validators=[DataRequired()])
+    state = StringField("State", validators=[DataRequired()])
+    zipCode = StringField("Zip Code", validators=[DataRequired()])
     submit = SubmitField("Look up")
     

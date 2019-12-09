@@ -9,7 +9,7 @@ from configs import Config
 from forms import LoginForm, GeoCodeAddress
 from datastore import dbaccess
 from flask_login.utils import login_required
-
+from apicalls import geocode as pgeo
 
 app = Flask(__name__)
 
@@ -60,11 +60,18 @@ def login():
     
     return render_template('login.html', title='Sign In', pagename='Login to EIS GIS', form=form)
   
-@app.route('/geocode')
+@app.route('/geocode', methods=['GET', 'POST'])
 def geocode():
     form = GeoCodeAddress()
     if form.validate_on_submit():
-        pass #TODO plug in geocode api
+        ad = {'address': form.fulladdress.data, 'city':form.city.data, 'state': form.state.data, 'zip':form.zipCode.data}
+        geo = pgeo.CensusGeocode(**ad)
+        geo.getgeo()        
+        mapped_address = ad        
+        lat = geo.lat[0]
+        long = geo.long[0]
+        return render_template('geocode.html', title='Test Geocoding', pagename='Test Geocoder', form=form, ad = mapped_address, lat=lat, long=long)
+                        
     else:
         return render_template('geocode.html', title='Test Geocoding', pagename='Test Geocoder', form=form)
       
