@@ -1,0 +1,2 @@
+full_address,house_number,house_number_suffix,street_predirection,street_name,street_type,address_postdirection,city,state,zipcode,latitude,longitude
+'601 Lakeside Ave.',,,,,,,'Cleveland','OH',44101,,

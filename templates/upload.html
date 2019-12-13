@@ -2,7 +2,12 @@
 
 {% block content %}
 <div class="uk-container uk-container-small">    
-    <p>Upload address data, district data, precinct and district relational data in txt or csv formats as described here</p>    
+    <p>Upload address data, district data, precinct and district relational data in txt or 
+    csv formats as described by clicking one of the options below:<br>
+    <a class="uk-button uk-button-default" href="#modal-district" uk-toggle>Districts</a>
+    <a class="uk-button uk-button-default" href="#modal-address" uk-toggle>Addresses</a>
+    <a class="uk-button uk-button-default" href="#modal-precincts" uk-toggle>Precincts</a>
+	</p>    
     <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
     	<input type='hidden' name='username' value='{{ userid }}'>
     	<table class="uk-table uk-table-striped">
@@ -19,5 +24,101 @@
     	<tr><td></td><td><input type='submit' value='Save File'></td></tr>
     	</tbody></table>
     </form>
+    {% if data %}
+    <h3>Files awaiting processing</h3>
+    <p>You must upload at least one file of each type to begin processing</p>
+    {% if can_process == 1 %}
+    	<a class="uk-button uk-button-primary" href="{{ url_for('process') }}">Process Files</a>
+    {% endif %}
+    <table class="uk-table uk-table-striped">
+    {% for row in data %}
+    	<tr>
+    	{% for c in row %}
+    		{% if c == 'file_id' %}
+    		<td></td>
+    		{% else %}
+    			{% if c[:1] == '/' %}
+    			<td><a href="{{ url_for ('delete', tablename='upload_data.uploaded_file',idcolumn='file_id',rowid=c[1:]) }}">delete</a></td>
+    			{% else %}
+		    		<td>{{ c }}</td>
+		    	{% endif %}
+    		{% endif %}
+    	{% endfor %}
+    		</tr>
+    {% endfor %}
+    </table>
+    {% endif %}
+    
 </div>
+<div id="modal-district" class="uk-flex-top" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
+
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+
+        <div class="uk-container uk-container-small">
+    <h3>File Layout Examples</h3>
+	<h4>District</h4>	
+	<p>CSV or txt, file comma delimited with the following fields</p>
+	<ul><li>district_id - identifier for district, text or integer, this identifier will be used in the precinct/district relationship</li>
+		<li>district_name - name of district text </li>
+		<li>district_type_name - type of district, see valid values below</li>
+		<li>state - two character postal designation for state</li>
+	</ul>
+	<a href="{{ url_for('static', filename='district_sample.txt') }}">Download Sample</a> (right-click, save link/target as..)
+	<h4>Valid District Types</h4>
+	<ul>
+		<li>Congressional District</li>
+		<li>County</li>
+		<li>State</li>
+		<li>State Legislative Lower House</li>
+		<li>State Legislative Upper House</li>
+		<li>State Town or City</li>	
+	</ul>
+    </div>
+</div>
+<div id="modal-address" class="uk-flex-top" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
+
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+
+        <div class="uk-container uk-container-small">
+    <h3>File Layout Examples</h3>
+	<h4>Address</h4>	
+	<p>CSV or txt, file comma delimited with the following fields</p>
+	<ul><li>full_address - full house number and street name (optional if parsed information below is provided)</li>
+	<li>house_number - house number of address</li>
+	<li>house_number_suffix - house number suffix if present</li>
+	<li>street_predirection - street predirection if present</li>
+	<li>street_name - street name</li>
+	<li>street_type - street type abbreviation</li>
+	<li>address_postdirection - address post-direction if present</li>
+	<li>city - city name, always required</li>
+	<li>state - state postal abbreviation, always required</li>
+	<li>zipcode - five digit zipcode</li>
+	<li>latitude - latitude of address if available</li>
+	<li>longitude - longitude of address if available</li>
+	<li>precinct_portion_id - precent identifier as referenced in district/precinct file</li>
+	</ul>
+	<a href="{{ url_for('static', filename='precinct_sample.txt') }}">Download Sample</a> (right-click, save link/target as..)
+    </div>
+</div>
+<div id="modal-precincts" class="uk-flex-top" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body uk-margin-auto-vertical">
+
+        <button class="uk-modal-close-default" type="button" uk-close></button>
+
+        <div class="uk-container uk-container-small">
+    <h3>File Layout Examples</h3>
+	<h4>Precinct</h4>	
+	<p>CSV or txt, file comma delimited with the following fields</p>
+	<ul>
+	<li>district_id - district identifier used in district file</li>
+	<li>precinct_portion_id - precinct identifier used in address file</li>
+	<li>state - two character postal abbreviation of state</li>
+	</ul>
+	<a href="{{ url_for('static', filename='address_sample.txt') }}">Download Sample</a> (right-click, save link/target as..)
+    </div>
+</div>
+
+
 {% endblock %}

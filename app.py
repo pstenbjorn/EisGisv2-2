@@ -10,6 +10,7 @@ from forms import LoginForm, GeoCodeAddress
 from datastore import dbaccess
 from flask_login.utils import login_required
 from apicalls import geocode as pgeo
+import datetime
 
 app = Flask(__name__)
 
@@ -37,7 +38,11 @@ def index():
     if 'user' not in session:
         return redirect(url_for('login'))
     
-    return render_template('index.html', title=d["title"], pagename=d['pagename'])
+    if 'userid' not in session['user']:
+        return redirect(url_for('login'))
+    
+    user = session['user']['userid']
+    return render_template('index.html', title=d["title"], pagename=d['pagename'], username=user)
     
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -51,7 +56,7 @@ def login():
         ld = db.login(form.username.data, form.password.data, form.remember_me.data)
         if ld.is_authenticated == True:
             login_user(ld, remember=form.remember_me.data)            
-            session["user"] = ld.toJSON()
+            session["user"] = json.loads(ld.toJSON())
             next_page = url_for('index')            
             
             return redirect(next_page)
@@ -62,6 +67,9 @@ def login():
   
 @app.route('/geocode', methods=['GET', 'POST'])
 def geocode():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    
     form = GeoCodeAddress()
     if form.validate_on_submit():
         ad = {'address': form.fulladdress.data, 'city':form.city.data, 'state': form.state.data, 'zip':form.zipCode.data}
@@ -73,7 +81,7 @@ def geocode():
         return render_template('geocode.html', title='Test Geocoding', pagename='Test Geocoder', form=form, ad = mapped_address, lat=lat, long=long)
                         
     else:
-        return render_template('geocode.html', title='Test Geocoding', pagename='Test Geocoder', form=form)
+        return render_template('geocode.html', title='Test Geocoding', pagename='Test Geocoder', form=form, username=session["user"]["userid"])
       
 
 @app.route('/api/<ver>/<path>')
@@ -91,16 +99,73 @@ def api(ver=None,path=None,id=None):
     
     return j
 
+@app.route('/delete/<tablename>/<idcolumn>/<rowid>')
+def delete(tablename, idcolumn, rowid):
+    db = dbaccess.dbConn() 
+    q = "delete from {0} where {1} = {2}::int".format(tablename,idcolumn,rowid);
+    db.run_query(q)
+    
+    return redirect('/upload')
+    #return q
+
+@app.route('/process')
+def process():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    username = username=session["user"]["userid"]
+    
+    db = dbaccess.dbConn()
+    q = """select distinct file_type from 
+        upload_data.uploaded_file 
+        where processed_date is null and create_user = '{0}'""".format(username)
+    r = db.get_data(q, headers=False)
+    
+    
+    
+
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+    
     if request.method == 'POST':
-        file = request.files['file']    
+        file = request.files['file']
+        filetype = request.form.get('filetype')
+        db = dbaccess.dbConn()            
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
+            filename = str(datetime.datetime.now()).replace(' ', '').replace('-','').replace(':','').replace('.','') + '_' + filename
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             flash('File successfully uploaded')
+            fields = 'file_name,file_type,create_user'
+            values = "'{0}','{1}','{2}'".format(filename, filetype,session["user"]["userid"])
+            db.insert_record('upload_data.uploaded_file', fields,values)
             return redirect('/upload')
     else:
-        return render_template('upload.html', title='Upload Files', pagename='File upload')
+        db=dbaccess.dbConn()
+        q = """select '/' ||file_id::varchar as file_id, 
+            file_name, file_type, create_date::varchar from upload_data.uploaded_file
+            where 
+            create_user = '{0}' and processed_date is null;
+            """.format(session["user"]["userid"])
+        d = db.get_data(q)
+        cp = check_process()
+                        
+        return render_template('upload.html', title='Upload Files', pagename='File upload', data=d, can_process=cp, username=session["user"]["userid"])
 
-    
+def check_process():
+    username = username=session["user"]["userid"]
+    db = dbaccess.dbConn()
+    q = """select distinct file_type from 
+        upload_data.uploaded_file 
+        where processed_date is null and create_user = '{0}'""".format(username)
+    r = db.get_data(q, headers=False)   
+    valid = ["address","district","precinctdistrict"]
+    for rr in r:
+        if rr[0] in valid:
+            valid.remove(rr[0])
+            
+    if len(valid) > 0:
+        return 0
+    else:
+        return 1

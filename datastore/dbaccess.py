@@ -28,7 +28,22 @@ class dbConn():
         thisuser = models.User(*l)
                 
         return thisuser
+    
+    def insert_record(self, table_name, fields, values):
         
+        cn = self.getcon(None)
+        cur = cn.cursor()
+        sql = "insert into {0} ({1}) SELECT {2}".format(table_name, fields, values)
+        cur.execute(sql)
+        cn.commit()
+        cn.close()
+     
+    def run_query(self, query):
+        cn = self.getcon(None)
+        cur = cn.cursor()
+        cur.execute(query)
+        cn.commit()
+        cn.close()
     
     def get_data(self, query, instance=None, headers=True):
         

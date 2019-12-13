@@ -22,18 +22,20 @@
 	            <li class="uk-active"><a href="{{ url_for('geocode') }}">Test Geocode</a></li>
 	            <li class="uk-active"><a href="#">Process Data Files</a></li>
 	            <li class="uk-active"><a href="{{ url_for('login') }}">Log out</a></li>
+	            {% if username %}
+	            <li>User: {{ username }}</li>
+	            {% endif %}
 	        </ul>
     	</div>
     </div>
-	
-<div class="uk-child-width-1-2@s uk-grid-match" uk-grid>
-	    <div>
+<div uk-grid>
+	    <div class="uk-width-1-3@m">
 	        <div class="uk-card uk-card-primary uk-card-hover uk-card-body">
 	            <h3 class="uk-card-title">Welcome to EIS-GIS</h3>
 	            <p>This project's objective is for the contractor (Election Information Services, Inc.) to create a suite of open source geospatial tools designed specifically for local and state election administration officials that will validate current electoral district and precinct assignments from address data and district definitions provided by the election administrators and from other sources. This tool set will be made available to all state and local election officials and will allow for the uploading/processing of address data and ESRI shape files. The tool will create reports of apparent mismatches of voter district assignments and be able to generate visualizations of assignment anomalies.</p>
 	        </div>
 	    </div>
-	    <div>
+	    <div class="uk-width-expand@m">
 	        <div class="uk-card uk-card-default uk-card-hover uk-card-body">
 	            <h3 class="uk-card-title">{{ pagename }} </h3>
 	            {% block content %}{% endblock %}
