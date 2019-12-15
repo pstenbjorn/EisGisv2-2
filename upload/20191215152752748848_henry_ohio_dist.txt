@@ -1,0 +1,3 @@
+district_id,district_type_name,district_name,state
+sldl81,State Legislative Lower House,81,OH
+sldu01,State Legislative Upper House,01,OH
