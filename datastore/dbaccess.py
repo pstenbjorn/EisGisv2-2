@@ -1,6 +1,7 @@
 import psycopg2
 from config import db_config
 import models
+import csv
 
 class dbConn():
     
@@ -44,6 +45,91 @@ class dbConn():
         cur.execute(query)
         cn.commit()
         cn.close()
+        
+    def import_file(self, file_id, filepath, username):
+                
+        cn = self.getcon(None)
+        sq = "select file_name, file_type from upload_data.uploaded_file where file_id ={0}".format(file_id)
+        cur = cn.cursor()
+        cur.execute(sq)
+        filename = ""
+        tablename = ""
+        for r in cur:
+            filename = filepath + r[0]
+            tablename = r[1]
+                       
+        
+        l = list()
+        with open(filename, newline='') as csvfile:
+            filereader = csv.reader(csvfile,delimiter=',')
+            for row in filereader:
+                l.append(row)
+        
+        tcur = cn.cursor()
+        if not self.does_file_exist(file_id, tablename):
+            
+            if tablename == 'address':
+                
+                sql = """INSERT INTO upload_data.street_address(
+                    full_address, house_number, house_number_suffix, 
+                    street_predirection, street_name, street_type, address_postdirection, 
+                    city, state, zipcode, latitude, longitude, precinct_portion_id
+                    , file_id, create_user) 
+                    SELECT '{0}','{1}','{2}','{3}','{4}','{5}','{6}','{7}','{8}','{9}','{10}','{11}','{12}','{13}','{14}'"""
+                
+                for rr in l:
+                    if rr[0]!= 'full_address':
+                        tcur.execute(sql.format(rr[0],rr[1],rr[2],rr[3],rr[4],rr[5],rr[6],rr[7],rr[8],rr[9],rr[10],rr[11],rr[12],file_id,username))
+                    
+            
+            if tablename == 'district':
+                
+                
+                sql = """INSERT INTO upload_data.district(
+                    district_id, district_type_id, district_name, 
+                    state, create_user, file_id)
+                    select '{0}', 
+                    (select district_type_id from upload_data.district_type where 
+                        district_type_name = '{1}' and state = '{3}'),
+                    '{2}', '{3}','{4}','{5}'"""
+                
+                for rr in l:
+                    if rr[0] != 'district_id':
+                        tcur.execute(sql.format(rr[0],rr[1],rr[2],rr[3], username,file_id))
+    
+            if tablename == 'precinctdistrict':
+                sql = """INSERT INTO upload_data.district_precinct(
+                        district_id, precinct_portion_id, state, create_user, file_id)
+                        select '{0}','{1}','{2}','{3}','{4}'"""
+                
+                for rr in l:
+                    if rr[0] != 'district_id':
+                        tcur.execute(sql.format(rr[0],rr[1],rr[2],username,file_id))
+        
+        cn.commit()
+        cn.close()
+    
+    def does_file_exist(self,file_id, tablename):
+        pgtable = ''
+        if tablename == 'address':
+            pgtable = 'upload_data.street_address'
+        if tablename == 'district':
+            pgtable = 'upload_data.district'
+        if tablename == 'precinctdistrict':
+            pgtable = 'upload_data.district_precinct'
+            
+        q = "select count(*) from {0} where file_id ='{1}'".format(pgtable, file_id)
+        dd = self.get_data(q, headers=False)
+        recs = 0
+        for i in dd:
+            recs = i[0]
+        
+        if recs > 0:
+            return True
+        else:
+            return False
+        
+            
     
     def get_data(self, query, instance=None, headers=True):
         

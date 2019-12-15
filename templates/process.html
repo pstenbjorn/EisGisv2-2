@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="uk-container uk-container-small">
+    <h3>Processed Files</h3>
+    <table class="uk-table uk-table-striped">
+    {% for row in data %}
+    	<tr>
+    	{% for c in row %}
+    		<td>{{ c }}</td>
+    	{% endfor %}
+    	</tr>
+    {% endfor %}
+    </table>
+    		
+    </div>
+{% endblock %}

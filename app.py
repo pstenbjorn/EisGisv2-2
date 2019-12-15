@@ -11,6 +11,7 @@ from datastore import dbaccess
 from flask_login.utils import login_required
 from apicalls import geocode as pgeo
 import datetime
+import pg_queries
 
 app = Flask(__name__)
 
@@ -115,10 +116,19 @@ def process():
     username = username=session["user"]["userid"]
     
     db = dbaccess.dbConn()
-    q = """select distinct file_type from 
+    q = """select distinct file_id, file_type, file_name from 
         upload_data.uploaded_file 
         where processed_date is null and create_user = '{0}'""".format(username)
     r = db.get_data(q, headers=False)
+    for fid in r:
+        db.import_file(fid[0], app.config['UPLOAD_FOLDER'], username)
+        if fid[1] == 'address':
+            pgeo.GeoFromDb(fid[0])
+    
+    data = db.get_data(pg_queries.QUERIES['get_process'].format(username))
+    
+    return render_template('process.html', title='Process Data', pagename='Process District Data', data=data)
+    
     
     
     
