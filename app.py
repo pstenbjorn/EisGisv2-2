@@ -12,6 +12,7 @@ from flask_login.utils import login_required
 from apicalls import geocode as pgeo
 import datetime
 import pg_queries
+import asyncio
 
 app = Flask(__name__)
 
@@ -123,7 +124,9 @@ def process():
     for fid in r:
         db.import_file(fid[0], app.config['UPLOAD_FOLDER'], username)
         if fid[1] == 'address':
-            pgeo.GeoFromDb(fid[0])
+            asyncio.run(pgeo.GeoFromDb(fid[0]))
+    
+    pgeo.processAddresses(username)
     
     data = db.get_data(pg_queries.QUERIES['get_process'].format(username))
     

@@ -9,3 +9,15 @@ def get_district(state, type, lat, long):
     from {0} t 
     where ST_CONTAINS(ST_SetSRID(geom, 2263), ST_GeometryFromText('POINT({1} {2})', 2263))""".format(t, long, lat)
     
+    
+# this gets points to map a district
+"""SELECT path, ST_AsText(geom)
+FROM (
+  SELECT (ST_DumpPoints(g.geom)).*
+  FROM
+    (select t.geom
+    from {0} t 
+    where ST_CONTAINS(ST_SetSRID(geom, 2263), 
+                      ST_GeometryFromText('POINT({1} {2})', 2263))
+    ) AS g
+  ) j;""".format()

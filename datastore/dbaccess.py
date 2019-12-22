@@ -13,6 +13,16 @@ class dbConn():
         
         return conn
     
+    def bulkinsert(self, lobj, ins_statement):
+        cn = self.getcon(None)
+        cur = cn.cursor()
+        records_list_template = ','.join(['%s'] * len(lobj))
+        ins_query = ins_statement + " VALUES {}".format(records_list_template)
+        cur.execute(ins_query, lobj)
+        cn.commit()
+        cn.close()
+        
+    
     def login(self, username, password, remember):
         i = 0
         un = ''
